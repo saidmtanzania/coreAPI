@@ -19,6 +19,8 @@ namespace coreAPI.Controllers
 
 
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetAll()
         {
             //Get Data From Database -Domain Model
@@ -45,6 +47,8 @@ namespace coreAPI.Controllers
         }
 
         [HttpGet("{id:Guid}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetById([FromRoute] Guid id)
         {
             //find by only ID
@@ -71,6 +75,8 @@ namespace coreAPI.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Create([FromBody] AddRegionRequestDto requestDto)
         {
             //Map or Convert DTO to Domain Model
@@ -100,6 +106,8 @@ namespace coreAPI.Controllers
         //Update region
         //PUT
         [HttpPut("{id:Guid}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateRegionDto updateDto)
         {
             //find by only ID
@@ -136,11 +144,10 @@ namespace coreAPI.Controllers
         //DELETE region
         //DELETE
         [HttpDelete("{id:Guid}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
-            //find by only ID
-            // var regionDomain = this.coreDbContext.Regions.Find(id);
-
             //find by other entity
             var regionDomain = await this.coreDbContext.Regions.FirstOrDefaultAsync(x => x.Id == id);
 
