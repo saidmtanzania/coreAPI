@@ -1,6 +1,6 @@
-namespace coreAPI.Models.DTO
+namespace coreAPI.Models.DTO.Regions
 {
-    public class AddRegionRequestDto
+    public class UpdateRegionDto
     {
         public required string Code { get; set; }
         public required string Name { get; set; }

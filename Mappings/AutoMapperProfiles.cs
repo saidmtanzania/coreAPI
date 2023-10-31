@@ -1,6 +1,6 @@
 using AutoMapper;
 using coreAPI.Models.Domain;
-using coreAPI.Models.DTO;
+using coreAPI.Models.DTO.Regions;
 
 namespace coreAPI.Mappings
 {

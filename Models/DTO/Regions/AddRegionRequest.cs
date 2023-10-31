@@ -1,8 +1,7 @@
-namespace coreAPI.Models.DTO
+namespace coreAPI.Models.DTO.Regions
 {
-    public class RegionDto
+    public class AddRegionRequestDto
     {
-        public Guid Id { get; set; }
         public required string Code { get; set; }
         public required string Name { get; set; }
         public string? RegionImageUrl { get; set; }
