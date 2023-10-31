@@ -131,6 +131,39 @@ namespace coreAPI.Controllers
             //return updated region
             return Ok(regionDto);
         }
+
+        //DELETE region
+        //DELETE
+        [HttpDelete("{id:Guid}")]
+        public IActionResult Delete([FromRoute] Guid id)
+        {
+            //find by only ID
+            // var regionDomain = this.coreDbContext.Regions.Find(id);
+
+            //find by other entity
+            var regionDomain = this.coreDbContext.Regions.FirstOrDefault(x => x.Id == id);
+
+            if (regionDomain is null)
+            {
+                return NotFound();
+            }
+
+            //Delete Region
+            this.coreDbContext.Regions.Remove(regionDomain);
+            this.coreDbContext.SaveChanges();
+
+            //Convert Domain Model to DTOs
+            var regionDto = new RegionDto
+            {
+                Id = regionDomain.Id,
+                Code = regionDomain.Code,
+                Name = regionDomain.Name,
+                RegionImageUrl = regionDomain.RegionImageUrl,
+            };
+
+            // return NoContent();
+            return Ok(regionDto);
+        }
     }
 }
 
