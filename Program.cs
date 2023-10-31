@@ -1,6 +1,6 @@
 using coreAPI.Data;
 using coreAPI.Mappings;
-using coreAPI.Repositories;
+using coreAPI.Repositories.Regions;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

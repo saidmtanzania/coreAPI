@@ -2,7 +2,7 @@ using AutoMapper;
 using coreAPI.Data;
 using coreAPI.Models.Domain;
 using coreAPI.Models.DTO;
-using coreAPI.Repositories;
+using coreAPI.Repositories.Regions;
 using Microsoft.AspNetCore.Mvc;
 namespace coreAPI.Controllers
 {
