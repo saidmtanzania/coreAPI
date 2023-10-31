@@ -94,7 +94,42 @@ namespace coreAPI.Controllers
             };
 
             return CreatedAtAction(nameof(GetById), new { id = regionDto.Id }, regionDto);
+        }
 
+        //Update region
+        //PUT
+        [HttpPut("{id:Guid}")]
+        public IActionResult Update([FromRoute] Guid id, [FromBody] UpdateRegionDto updateDto)
+        {
+            //find by only ID
+            // var regionDomain = this.coreDbContext.Regions.Find(id);
+
+            //find by other entity
+            var regionDomain = this.coreDbContext.Regions.FirstOrDefault(x => x.Id == id);
+
+            if (regionDomain is null)
+            {
+                return NotFound();
+            }
+
+            //Update Region
+            regionDomain.Code = updateDto.Code;
+            regionDomain.Name = updateDto.Name;
+            regionDomain.RegionImageUrl = updateDto.RegionImageUrl;
+
+            this.coreDbContext.SaveChanges();
+
+            //Convert Domain Model to DTOs
+            var regionDto = new RegionDto
+            {
+                Id = regionDomain.Id,
+                Code = regionDomain.Code,
+                Name = regionDomain.Name,
+                RegionImageUrl = regionDomain.RegionImageUrl,
+            };
+
+            //return updated region
+            return Ok(regionDto);
         }
     }
 }
