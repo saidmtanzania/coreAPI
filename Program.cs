@@ -1,4 +1,5 @@
 using coreAPI.Data;
+using coreAPI.Mappings;
 using coreAPI.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,6 +18,7 @@ options.UseSqlServer(builder.Configuration.GetConnectionString("CoreAPIConnectio
 );
 
 builder.Services.AddScoped<IRegionRepository, SQLRegionRepository>();
+builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 
 var app = builder.Build();
 
