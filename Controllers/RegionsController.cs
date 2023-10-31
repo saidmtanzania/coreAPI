@@ -2,6 +2,7 @@ using coreAPI.Data;
 using coreAPI.Models.Domain;
 using coreAPI.Models.DTO;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace coreAPI.Controllers
 {
@@ -18,10 +19,10 @@ namespace coreAPI.Controllers
 
 
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
             //Get Data From Database -Domain Model
-            var regionsDomain = this.coreDbContext.Regions.ToList();
+            var regionsDomain = await this.coreDbContext.Regions.ToListAsync();
             if (regionsDomain == null || regionsDomain.Count == 0)
             {
                 return NotFound();
@@ -44,13 +45,13 @@ namespace coreAPI.Controllers
         }
 
         [HttpGet("{id:Guid}")]
-        public IActionResult GetById([FromRoute] Guid id)
+        public async Task<IActionResult> GetById([FromRoute] Guid id)
         {
             //find by only ID
             // var regionDomain = this.coreDbContext.Regions.Find(id);
 
             //find by other entity
-            var regionDomain = this.coreDbContext.Regions.FirstOrDefault(x => x.Id == id);
+            var regionDomain = await this.coreDbContext.Regions.FirstOrDefaultAsync(x => x.Id == id);
 
             if (regionDomain is null)
             {
@@ -70,7 +71,7 @@ namespace coreAPI.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody] AddRegionRequestDto requestDto)
+        public async Task<IActionResult> Create([FromBody] AddRegionRequestDto requestDto)
         {
             //Map or Convert DTO to Domain Model
             var regionDomainModel = new Region
@@ -81,8 +82,8 @@ namespace coreAPI.Controllers
             };
 
             //Use Domain Model to create Region
-            this.coreDbContext.Regions.Add(regionDomainModel);
-            this.coreDbContext.SaveChanges();
+            await this.coreDbContext.Regions.AddAsync(regionDomainModel);
+            await this.coreDbContext.SaveChangesAsync();
 
             //Map Domain Model to DTOs
             var regionDto = new RegionDto
@@ -99,13 +100,13 @@ namespace coreAPI.Controllers
         //Update region
         //PUT
         [HttpPut("{id:Guid}")]
-        public IActionResult Update([FromRoute] Guid id, [FromBody] UpdateRegionDto updateDto)
+        public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateRegionDto updateDto)
         {
             //find by only ID
             // var regionDomain = this.coreDbContext.Regions.Find(id);
 
             //find by other entity
-            var regionDomain = this.coreDbContext.Regions.FirstOrDefault(x => x.Id == id);
+            var regionDomain = await this.coreDbContext.Regions.FirstOrDefaultAsync(x => x.Id == id);
 
             if (regionDomain is null)
             {
@@ -117,7 +118,7 @@ namespace coreAPI.Controllers
             regionDomain.Name = updateDto.Name;
             regionDomain.RegionImageUrl = updateDto.RegionImageUrl;
 
-            this.coreDbContext.SaveChanges();
+            await this.coreDbContext.SaveChangesAsync();
 
             //Convert Domain Model to DTOs
             var regionDto = new RegionDto
@@ -135,13 +136,13 @@ namespace coreAPI.Controllers
         //DELETE region
         //DELETE
         [HttpDelete("{id:Guid}")]
-        public IActionResult Delete([FromRoute] Guid id)
+        public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
             //find by only ID
             // var regionDomain = this.coreDbContext.Regions.Find(id);
 
             //find by other entity
-            var regionDomain = this.coreDbContext.Regions.FirstOrDefault(x => x.Id == id);
+            var regionDomain = await this.coreDbContext.Regions.FirstOrDefaultAsync(x => x.Id == id);
 
             if (regionDomain is null)
             {
@@ -150,7 +151,7 @@ namespace coreAPI.Controllers
 
             //Delete Region
             this.coreDbContext.Regions.Remove(regionDomain);
-            this.coreDbContext.SaveChanges();
+            await this.coreDbContext.SaveChangesAsync();
 
             //Convert Domain Model to DTOs
             var regionDto = new RegionDto
