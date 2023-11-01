@@ -1,4 +1,5 @@
 using AutoMapper;
+using coreAPI.Middlewares;
 using coreAPI.Models.Domain;
 using coreAPI.Models.DTO.Walks;
 using coreAPI.Repositories.Walks;
@@ -56,6 +57,7 @@ namespace coreAPI.Controllers
         //CREATE Walk
         //POST
         [HttpPost]
+        [ModelValidation]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> Create([FromBody] AddWalksRequestDto addWalksRequestDto)
@@ -73,6 +75,7 @@ namespace coreAPI.Controllers
         //UPDATE Walk
         //PUT
         [HttpPut("{id:Guid}")]
+        [ModelValidation]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult> Update([FromRoute] Guid id, [FromBody] UpdateWalksRequestDto updateWalksRequestDto)

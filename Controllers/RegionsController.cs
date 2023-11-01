@@ -1,5 +1,6 @@
 using AutoMapper;
 using coreAPI.Data;
+using coreAPI.Middlewares;
 using coreAPI.Models.Domain;
 using coreAPI.Models.DTO.Regions;
 using coreAPI.Repositories.Regions;
@@ -56,10 +57,12 @@ namespace coreAPI.Controllers
         //ADD region
         //POST
         [HttpPost]
+        [ModelValidation]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Create([FromBody] AddRegionRequestDto addRegionRequestDto)
         {
+
             //Map or Convert DTO to Domain Model
             var regionDomainModel = _mapper.Map<Region>(addRegionRequestDto);
             //Use Domain Model to create Region
@@ -68,15 +71,18 @@ namespace coreAPI.Controllers
             var regionDto = _mapper.Map<RegionDto>(regionDomainModel);
             //return created region response
             return CreatedAtAction(nameof(GetById), new { id = regionDto.Id }, regionDto);
+
         }
 
         //UPDATE region
         //PUT
         [HttpPut("{id:Guid}")]
+        [ModelValidation]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateRegionDto updateDto)
         {
+
             //Map DTO to Domain Model
             var regionDomain = _mapper.Map<Region>(updateDto);
             //Query and Check if region exist
@@ -90,6 +96,7 @@ namespace coreAPI.Controllers
             var regionDto = _mapper.Map<UpdateRegionDto>(regionDomain);
             //return updated region
             return Ok(regionDto);
+
         }
 
         //DELETE region
