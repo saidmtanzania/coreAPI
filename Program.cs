@@ -1,6 +1,7 @@
 using coreAPI.Data;
 using coreAPI.Mappings;
 using coreAPI.Repositories.Regions;
+using coreAPI.Repositories.Walks;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,6 +19,7 @@ options.UseSqlServer(builder.Configuration.GetConnectionString("CoreAPIConnectio
 );
 
 builder.Services.AddScoped<IRegionRepository, SQLRegionRepository>();
+builder.Services.AddScoped<IWalksRepository, SQLWalkRepository>();
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 
 var app = builder.Build();

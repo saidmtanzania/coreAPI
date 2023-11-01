@@ -10,13 +10,11 @@ namespace coreAPI.Controllers
     [ApiController]
     public class RegionsController : ControllerBase
     {
-        private readonly CoreDbContext _coreDbContext;
         private readonly IRegionRepository _regionRepository;
         private readonly IMapper _mapper;
 
-        public RegionsController(CoreDbContext coreDbContext, IRegionRepository regionRepository, IMapper mapper)
+        public RegionsController(IRegionRepository regionRepository, IMapper mapper)
         {
-            _coreDbContext = coreDbContext;
             _regionRepository = regionRepository;
             _mapper = mapper;
         }
@@ -28,13 +26,11 @@ namespace coreAPI.Controllers
         public async Task<IActionResult> GetAll()
         {
             //Get Data From Repository
-            var regionsDomain = await _regionRepository.GetAllAsync();
-
+            var regionDomain = await _regionRepository.GetAllAsync();
             //Map Domain Model to DTOs
-            var regionsDto = _mapper.Map<List<RegionDto>>(regionsDomain);
-
+            var regionDto = _mapper.Map<List<RegionDto>>(regionDomain);
             //Return DTOs to client
-            return Ok(regionsDto);
+            return Ok(regionDto);
         }
 
         //GET one region
@@ -46,15 +42,13 @@ namespace coreAPI.Controllers
         {
             //Get Data From Repository
             var regionDomain = await _regionRepository.GetByIdAsync(id);
-
+            //Check if region exist
             if (regionDomain is null)
             {
                 return NotFound();
             }
-
             //Map Domain Model to DTOs
             var regionDto = _mapper.Map<RegionDto>(regionDomain);
-
             //Return DTOs to client
             return Ok(regionDto);
         }
@@ -68,13 +62,11 @@ namespace coreAPI.Controllers
         {
             //Map or Convert DTO to Domain Model
             var regionDomainModel = _mapper.Map<Region>(addRegionRequestDto);
-
             //Use Domain Model to create Region
             regionDomainModel = await _regionRepository.CreateAsync(regionDomainModel);
-
             //Map Domain Model to DTOs
             var regionDto = _mapper.Map<RegionDto>(regionDomainModel);
-
+            //return created region response
             return CreatedAtAction(nameof(GetById), new { id = regionDto.Id }, regionDto);
         }
 
@@ -87,17 +79,15 @@ namespace coreAPI.Controllers
         {
             //Map DTO to Domain Model
             var regionDomain = _mapper.Map<Region>(updateDto);
-
             //Query and Check if region exist
             regionDomain = await _regionRepository.UpdateAsync(id, regionDomain);
+            //Check if region exist and return response
             if (regionDomain == null)
             {
                 return NotFound();
             }
-
             //Convert Domain Model to DTOs
             var regionDto = _mapper.Map<UpdateRegionDto>(regionDomain);
-
             //return updated region
             return Ok(regionDto);
         }
@@ -109,17 +99,16 @@ namespace coreAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
-            //find by other entity
+            //find region if available and delete it.
             var regionDomain = await _regionRepository.DeleteAsync(id);
+            //Check if region exist
             if (regionDomain is null)
             {
                 return NotFound();
             }
-
             //Convert Domain Model to DTOs
             var regionDto = _mapper.Map<RegionDto>(regionDomain);
-
-            // return NoContent();
+            // return deleted region
             return Ok(regionDto);
         }
     }
