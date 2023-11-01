@@ -25,7 +25,7 @@ namespace coreAPI.Repositories.Walks
         public async Task<Walk?> DeleteAsync(Guid id)
         {
             //Fetching an existing Walk from database
-            var existingWalk = await _dbContext.Walks.FindAsync(id);
+            var existingWalk = await _dbContext.Walks.FirstOrDefaultAsync(x => x.Id == id);
             //Checking if Walk exists if not return null
             if (existingWalk == null)
             {
@@ -48,13 +48,13 @@ namespace coreAPI.Repositories.Walks
         public async Task<Walk?> GetByIdAsync(Guid id)
         {
             //Getting Walk from database by id and return response
-            return await _dbContext.Walks.FindAsync(id);
+            return await _dbContext.Walks.Include("Difficulty").Include("Region").FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<Walk?> UpdateAsync(Guid id, Walk walk)
         {
             //Fetching an existing Walks by Id from the database
-            var existingWalk = await _dbContext.Walks.FindAsync(id);
+            var existingWalk = await _dbContext.Walks.FirstOrDefaultAsync(x => x.Id == id);
             //Checking if Walk exists if not return null
             if (existingWalk == null)
             {

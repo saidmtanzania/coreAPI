@@ -26,7 +26,7 @@ namespace coreAPI.Repositories.Regions
         public async Task<Region?> DeleteAsync(Guid id)
         {
             //fetch an existing region from the database
-            var existingRegion = await _dbContext.Regions.FindAsync(id);
+            var existingRegion = await _dbContext.Regions.FirstOrDefaultAsync(x => x.Id == id);
             //Check if region exist in the database
             if (existingRegion == null)
             {
@@ -49,13 +49,13 @@ namespace coreAPI.Repositories.Regions
         public async Task<Region?> GetByIdAsync(Guid id)
         {
             //Getting a region by ID and return response
-            return await _dbContext.Regions.FindAsync(id);
+            return await _dbContext.Regions.FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<Region?> UpdateAsync(Guid id, Region region)
         {
             //fetch an existing region from the databases
-            var existingRegion = await _dbContext.Regions.FindAsync(id);
+            var existingRegion = await _dbContext.Regions.FirstOrDefaultAsync(x => x.Id == id);
             //Check if region exist in the database
             if (existingRegion == null)
             {
