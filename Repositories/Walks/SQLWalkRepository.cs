@@ -39,10 +39,26 @@ namespace coreAPI.Repositories.Walks
             return existingWalk;
         }
 
-        public async Task<List<Walk>> GetAllAsync()
+        public async Task<List<Walk>> GetAllAsync(string? filterOn = null, string? filterQuery = null)
         {
             //Getting all Walks from database  and return response
-            return await _dbContext.Walks.Include("Difficulty").Include("Region").ToListAsync();
+            var walks = _dbContext.Walks.Include("Difficulty").Include("Region").AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(filterOn) && !string.IsNullOrWhiteSpace(filterQuery))
+            {
+                if (filterOn.Equals("Name", StringComparison.OrdinalIgnoreCase))
+                {
+                    walks = walks.Where(x => x.Name.Contains(filterQuery));
+                }
+            }
+            //
+            return await walks.ToListAsync();
+            //_dbContext.Walks.Include("Difficulty").Include("Region").ToListAsync();
+        }
+
+        private void elseif(bool v)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<Walk?> GetByIdAsync(Guid id)

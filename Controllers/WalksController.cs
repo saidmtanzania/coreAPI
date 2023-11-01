@@ -24,10 +24,10 @@ namespace coreAPI.Controllers
         //GET
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult> GetAll()
+        public async Task<ActionResult> GetAll([FromQuery] string? filterOn, [FromQuery] string? filterQuery)
         {
             //Geting Data from Repository
-            var walkDomain = await _walksRepository.GetAllAsync();
+            var walkDomain = await _walksRepository.GetAllAsync(filterOn, filterQuery);
             //Map Domain Model to DTO
             var walkDto = _mapper.Map<List<WalkDto>>(walkDomain);
             //Return Walks to Client
