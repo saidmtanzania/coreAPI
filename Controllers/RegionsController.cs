@@ -1,5 +1,4 @@
 using AutoMapper;
-using coreAPI.Data;
 using coreAPI.Middlewares;
 using coreAPI.Models.Domain;
 using coreAPI.Models.DTO.Regions;
