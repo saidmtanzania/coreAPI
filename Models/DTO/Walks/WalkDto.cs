@@ -1,3 +1,6 @@
+using coreAPI.Models.DTO.Difficulties;
+using coreAPI.Models.DTO.Regions;
+
 namespace coreAPI.Models.DTO.Walks
 {
     public class WalkDto
@@ -9,5 +12,8 @@ namespace coreAPI.Models.DTO.Walks
         public string? WalkImageUrl { get; set; }
         public Guid DifficultyId { get; set; }
         public Guid RegionId { get; set; }
+
+        public RegionDto Region { get; set; }
+        public DifficultyDto Difficulty { get; set; }
     }
 }

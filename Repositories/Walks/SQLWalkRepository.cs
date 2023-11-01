@@ -42,7 +42,7 @@ namespace coreAPI.Repositories.Walks
         public async Task<List<Walk>> GetAllAsync()
         {
             //Getting all Walks from database  and return response
-            return await _dbContext.Walks.ToListAsync();
+            return await _dbContext.Walks.Include("Difficulty").Include("Region").ToListAsync();
         }
 
         public async Task<Walk?> GetByIdAsync(Guid id)

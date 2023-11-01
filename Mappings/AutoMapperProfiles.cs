@@ -1,5 +1,6 @@
 using AutoMapper;
 using coreAPI.Models.Domain;
+using coreAPI.Models.DTO.Difficulties;
 using coreAPI.Models.DTO.Regions;
 using coreAPI.Models.DTO.Walks;
 
@@ -15,6 +16,7 @@ namespace coreAPI.Mappings
             CreateMap<Walk, WalkDto>().ReverseMap();
             CreateMap<AddWalksRequestDto, Walk>().ReverseMap();
             CreateMap<UpdateWalksRequestDto, Walk>().ReverseMap();
+            CreateMap<Difficulty, DifficultyDto>().ReverseMap();
         }
     }
 }
