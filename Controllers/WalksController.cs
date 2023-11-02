@@ -28,11 +28,13 @@ namespace coreAPI.Controllers
             [FromQuery] string? filterOn,
             [FromQuery] string? filterQuery,
             [FromQuery] string? sortBy,
-            [FromQuery] bool IsAsceding
+            [FromQuery] bool IsAsceding,
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 1000
         )
         {
             //Geting Data from Repository
-            var walkDomain = await _walksRepository.GetAllAsync(filterOn, filterQuery, sortBy, IsAsceding);
+            var walkDomain = await _walksRepository.GetAllAsync(filterOn, filterQuery, sortBy, IsAsceding, pageNumber, pageSize);
             //Map Domain Model to DTO
             var walkDto = _mapper.Map<List<WalkDto>>(walkDomain);
             //Return Walks to Client
