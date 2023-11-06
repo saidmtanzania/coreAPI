@@ -3,11 +3,13 @@ using coreAPI.Middlewares;
 using coreAPI.Models.Domain;
 using coreAPI.Models.DTO.Regions;
 using coreAPI.Repositories.Regions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 namespace coreAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public class RegionsController : ControllerBase
     {
         private readonly IRegionRepository _regionRepository;
@@ -22,6 +24,7 @@ namespace coreAPI.Controllers
         //GET all regions
         //GET
         [HttpGet]
+        [Authorize(Roles = "Reader")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAll()
         {
@@ -36,6 +39,7 @@ namespace coreAPI.Controllers
         //GET one region
         //GET(id)
         [HttpGet("{id:Guid}")]
+        [Authorize(Roles = "Reader")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetById([FromRoute] Guid id)
@@ -57,6 +61,7 @@ namespace coreAPI.Controllers
         //POST
         [HttpPost]
         [ModelValidation]
+        [Authorize(Roles = "Writer")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Create([FromBody] AddRegionRequestDto addRegionRequestDto)
@@ -77,6 +82,7 @@ namespace coreAPI.Controllers
         //PUT
         [HttpPut("{id:Guid}")]
         [ModelValidation]
+        [Authorize(Roles = "Writer")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateRegionDto updateDto)
@@ -101,6 +107,7 @@ namespace coreAPI.Controllers
         //DELETE region
         //DELETE
         [HttpDelete("{id:Guid}")]
+        [Authorize(Roles = "Writer")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Delete([FromRoute] Guid id)

@@ -5,7 +5,7 @@ namespace coreAPI.Data
 {
     public class CoreDbContext : DbContext
     {
-        public CoreDbContext(DbContextOptions dbContextOptions) : base(dbContextOptions)
+        public CoreDbContext(DbContextOptions<CoreDbContext> dbContextOptions) : base(dbContextOptions)
         {
 
         }
