@@ -27,7 +27,7 @@ namespace coreAPI.Controllers
             }
             //Convert DTO to Domain
             // var imageDomain = _mapper.Map<Image>(imageUpload);
-            var imageDomain = new Image
+            Image imageDomain = new Image
             {
                 File = imageUpload.File,
                 FileExtension = Path.GetExtension(imageUpload.File.FileName),
@@ -45,7 +45,7 @@ namespace coreAPI.Controllers
 
         private void ValidateImageUpload(ImageUploadRequestDto imageUpload)
         {
-            var allowedExtension = new string[] { ".jpg", ".jpeg", ".png" };
+            string[] allowedExtension = new string[] { ".jpg", ".jpeg", ".png" };
             if (!allowedExtension.Contains(Path.GetExtension(imageUpload.File.FileName)))
             {
                 ModelState.AddModelError("File", "Invalid file type");

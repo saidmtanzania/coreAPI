@@ -21,7 +21,7 @@ namespace coreAPI.Data
 
             //Data Seeding for Difficulties
             //Easy, Medium, hard
-            var difficulties = new List<Difficulty>()
+            List<Difficulty> difficulties = new List<Difficulty>()
             {
                 new() { Id=Guid.Parse("beb25260-3c11-4bde-b638-d91b415710e6"), Name = "EASY",},
                 new() { Id=Guid.Parse("ba8baf41-f687-42a1-adc0-883461b41cb7"), Name = "MEDIUM", },
@@ -31,7 +31,7 @@ namespace coreAPI.Data
             modelBuilder.Entity<Difficulty>().HasData(difficulties);
 
             //Data Seeding for Regions
-            var regions = new List<Region>()
+            List<Region> regions = new List<Region>()
             {
                 new() { Id=Guid.Parse("5636a3b1-e899-46e5-9fb3-a60a9e593fb7"), Code="TZ", Name="TANZANIA", RegionImageUrl="https://www.state.gov/wp-content/uploads/2018/11/Tanzania-e1555938157355-2501x1406.jpg"},
                 new() { Id=Guid.Parse("97a6bd50-aa74-4dc5-b6de-1869db81d98f"), Code="KE", Name="KENYA", RegionImageUrl="https://destinationuganda.com/wp-content/uploads/2020/10/exploring-kampala-city-uganda-capital.jpg"},

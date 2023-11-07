@@ -25,7 +25,7 @@ namespace coreAPI.Repositories.Walks
         public async Task<Walk?> DeleteAsync(Guid id)
         {
             //Fetching an existing Walk from database
-            var existingWalk = await _dbContext.Walks.FirstOrDefaultAsync(x => x.Id == id);
+            Walk? existingWalk = await _dbContext.Walks.FirstOrDefaultAsync(x => x.Id == id);
             //Checking if Walk exists if not return null
             if (existingWalk == null)
             {
@@ -49,7 +49,7 @@ namespace coreAPI.Repositories.Walks
         )
         {
             //Getting all Walks from database  and return response
-            var walks = _dbContext.Walks.Include("Difficulty").Include("Region").AsQueryable();
+            IQueryable<Walk> walks = _dbContext.Walks.Include("Difficulty").Include("Region").AsQueryable();
 
             //Filtering
             if (!string.IsNullOrWhiteSpace(filterOn) && !string.IsNullOrWhiteSpace(filterQuery))
@@ -75,7 +75,7 @@ namespace coreAPI.Repositories.Walks
             }
 
             //Pagination
-            var skipResult = (pageNumber - 1) * pageSize;
+            int skipResult = (pageNumber - 1) * pageSize;
             //
             return await walks.Skip(skipResult).Take(pageSize).ToListAsync();
             //_dbContext.Walks.Include("Difficulty").Include("Region").ToListAsync();
@@ -95,7 +95,7 @@ namespace coreAPI.Repositories.Walks
         public async Task<Walk?> UpdateAsync(Guid id, Walk walk)
         {
             //Fetching an existing Walks by Id from the database
-            var existingWalk = await _dbContext.Walks.FirstOrDefaultAsync(x => x.Id == id);
+            Walk? existingWalk = await _dbContext.Walks.FirstOrDefaultAsync(x => x.Id == id);
             //Checking if Walk exists if not return null
             if (existingWalk == null)
             {

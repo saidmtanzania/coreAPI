@@ -31,13 +31,13 @@ namespace coreAPI.Controllers
                 return BadRequest("User registered Failed. No roles provided.");
             }
 
-            var identityUser = new IdentityUser
+            IdentityUser identityUser = new IdentityUser
             {
                 UserName = registerRequest.Username,
                 Email = registerRequest.Username,
             };
 
-            var identityResult = await _userManager.CreateAsync(identityUser, registerRequest.Password);
+            IdentityResult identityResult = await _userManager.CreateAsync(identityUser, registerRequest.Password);
 
             // Handle the case where user creation fails
             if (!identityResult.Succeeded)
@@ -62,18 +62,18 @@ namespace coreAPI.Controllers
         [Route("Login")]
         public async Task<IActionResult> Login([FromBody] LoginRequestDto loginRequest)
         {
-            var user = await _userManager.FindByEmailAsync(loginRequest.Username);
+            IdentityUser? user = await _userManager.FindByEmailAsync(loginRequest.Username);
             if (user != null)
             {
-                var checkPass = await _userManager.CheckPasswordAsync(user, loginRequest.Password);
+                bool checkPass = await _userManager.CheckPasswordAsync(user, loginRequest.Password);
                 if (checkPass)
                 {
-                    var role = await _userManager.GetRolesAsync(user);
+                    IList<string> role = await _userManager.GetRolesAsync(user);
                     if (role != null)
                     {
-                        var jwtToken = _tokenRepository.CreateJWTToken(user, role.ToList());
+                        string jwtToken = _tokenRepository.CreateJWTToken(user, role.ToList());
                         //Create Token
-                        var response = new LoginResponseDto(jwtToken);
+                        LoginResponseDto response = new LoginResponseDto(jwtToken);
                         return Ok(response);
                     }
                 }

@@ -19,14 +19,14 @@ namespace coreAPI.Repositories.Uploads
         {
             try
             {
-                var uploadDirectory = Path.Combine(_hostEnvironment.ContentRootPath, "UploadFolder", "Images");
-                var localPath = Path.Combine(uploadDirectory, $"{image.FileName}{image.FileExtension}");
+                string uploadDirectory = Path.Combine(_hostEnvironment.ContentRootPath, "UploadFolder", "Images");
+                string localPath = Path.Combine(uploadDirectory, $"{image.FileName}{image.FileExtension}");
 
                 // Upload image to Local Path
-                using var stream = new FileStream(localPath, FileMode.Create);
+                using FileStream stream = new FileStream(localPath, FileMode.Create);
                 await image.File.CopyToAsync(stream);
 
-                var urlFilePath = $"{_contextAccessor.HttpContext.Request.Scheme}://{_contextAccessor.HttpContext.Request.Host}{_contextAccessor.HttpContext.Request.PathBase}/UploadFolder/Images/{image.FileName}{image.FileExtension}";
+                string urlFilePath = $"{_contextAccessor.HttpContext.Request.Scheme}://{_contextAccessor.HttpContext.Request.Host}{_contextAccessor.HttpContext.Request.PathBase}/UploadFolder/Images/{image.FileName}{image.FileExtension}";
                 image.FilePath = urlFilePath;
 
                 // Add Image to Images Table
@@ -41,23 +41,5 @@ namespace coreAPI.Repositories.Uploads
                 throw ex; // Optionally, rethrow the exception
             }
         }
-
-        // public async Task<Image> Upload(Image image)
-        // {
-        //     var uploadDirectory = Path.Combine(_hostEnvironment.ContentRootPath, "UploadFolder", "Images");
-        //     var localPath = Path.Combine(uploadDirectory, image.FileName, image.FileExtension);
-
-        //     //Upload image to Local Path
-        //     using var stream = new FileStream(localPath, FileMode.Create);
-        //     await image.File.CopyToAsync(stream);
-
-        //     //
-        //     var urlFilePath = $"{_contextAccessor.HttpContext.Request.Scheme}://{_contextAccessor.HttpContext.Request.Host}{_contextAccessor.HttpContext.Request.PathBase}/UploadFolder/Images/{image.FileName}{image.FileExtension}";
-        //     image.FilePath = urlFilePath;
-        //     //Add Images to IMmages Table
-        //     await _dbContext.Images.AddAsync(image);
-        //     await _dbContext.SaveChangesAsync();
-
-        // }
     }
 }

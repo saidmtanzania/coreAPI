@@ -14,10 +14,10 @@ namespace coreAPI.Data
         {
             base.OnModelCreating(builder);
 
-            var readerRoleId = "e14f49d5-6c3f-4393-8610-a3c8cbdb618b";
-            var writerRoleId = "8a6a959b-e451-4d82-ad31-7e2377d1041b";
+            string readerRoleId = "e14f49d5-6c3f-4393-8610-a3c8cbdb618b";
+            string writerRoleId = "8a6a959b-e451-4d82-ad31-7e2377d1041b";
 
-            var roles = new List<IdentityRole>
+            List<IdentityRole> roles = new List<IdentityRole>
             {
                 new() {
                     Id = readerRoleId,

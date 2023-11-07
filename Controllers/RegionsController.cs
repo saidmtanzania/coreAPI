@@ -1,3 +1,4 @@
+using System.Text.Json;
 using AutoMapper;
 using coreAPI.Middlewares;
 using coreAPI.Models.Domain;
@@ -14,26 +15,37 @@ namespace coreAPI.Controllers
     {
         private readonly IRegionRepository _regionRepository;
         private readonly IMapper _mapper;
+        private readonly ILogger<RegionsController> _logger;
 
-        public RegionsController(IRegionRepository regionRepository, IMapper mapper)
+        public RegionsController(IRegionRepository regionRepository, IMapper mapper, ILogger<RegionsController> logger)
         {
             _regionRepository = regionRepository;
             _mapper = mapper;
+            _logger = logger;
         }
 
         //GET all regions
         //GET
         [HttpGet]
-        [Authorize(Roles = "Reader")]
+        // [Authorize(Roles = "Reader")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAll()
         {
-            //Get Data From Repository
-            var regionDomain = await _regionRepository.GetAllAsync();
-            //Map Domain Model to DTOs
-            var regionDto = _mapper.Map<List<RegionDto>>(regionDomain);
-            //Return DTOs to client
-            return Ok(regionDto);
+            try
+            {
+                throw new Exception("Pull Over here x");
+                //Get Data From Repository
+                List<Region> regionDomain = await _regionRepository.GetAllAsync();
+                //Map Domain Model to DTOs
+                List<RegionDto> regionDto = _mapper.Map<List<RegionDto>>(regionDomain);
+                //Return DTOs to client
+                return Ok(regionDto);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, message: ex.Message);
+                return BadRequest(ex.Message);
+            }
         }
 
         //GET one region
@@ -45,14 +57,14 @@ namespace coreAPI.Controllers
         public async Task<IActionResult> GetById([FromRoute] Guid id)
         {
             //Get Data From Repository
-            var regionDomain = await _regionRepository.GetByIdAsync(id);
+            Region? regionDomain = await _regionRepository.GetByIdAsync(id);
             //Check if region exist
             if (regionDomain is null)
             {
                 return NotFound();
             }
             //Map Domain Model to DTOs
-            var regionDto = _mapper.Map<RegionDto>(regionDomain);
+            RegionDto regionDto = _mapper.Map<RegionDto>(regionDomain);
             //Return DTOs to client
             return Ok(regionDto);
         }
@@ -68,11 +80,11 @@ namespace coreAPI.Controllers
         {
 
             //Map or Convert DTO to Domain Model
-            var regionDomainModel = _mapper.Map<Region>(addRegionRequestDto);
+            Region regionDomainModel = _mapper.Map<Region>(addRegionRequestDto);
             //Use Domain Model to create Region
             regionDomainModel = await _regionRepository.CreateAsync(regionDomainModel);
             //Map Domain Model to DTOs
-            var regionDto = _mapper.Map<RegionDto>(regionDomainModel);
+            RegionDto regionDto = _mapper.Map<RegionDto>(regionDomainModel);
             //return created region response
             return CreatedAtAction(nameof(GetById), new { id = regionDto.Id }, regionDto);
 
@@ -89,7 +101,7 @@ namespace coreAPI.Controllers
         {
 
             //Map DTO to Domain Model
-            var regionDomain = _mapper.Map<Region>(updateDto);
+            Region? regionDomain = _mapper.Map<Region>(updateDto);
             //Query and Check if region exist
             regionDomain = await _regionRepository.UpdateAsync(id, regionDomain);
             //Check if region exist and return response
@@ -98,7 +110,7 @@ namespace coreAPI.Controllers
                 return NotFound();
             }
             //Convert Domain Model to DTOs
-            var regionDto = _mapper.Map<UpdateRegionDto>(regionDomain);
+            UpdateRegionDto regionDto = _mapper.Map<UpdateRegionDto>(regionDomain);
             //return updated region
             return Ok(regionDto);
 
@@ -113,14 +125,14 @@ namespace coreAPI.Controllers
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
             //find region if available and delete it.
-            var regionDomain = await _regionRepository.DeleteAsync(id);
+            Region? regionDomain = await _regionRepository.DeleteAsync(id);
             //Check if region exist
             if (regionDomain is null)
             {
                 return NotFound();
             }
             //Convert Domain Model to DTOs
-            var regionDto = _mapper.Map<RegionDto>(regionDomain);
+            RegionDto regionDto = _mapper.Map<RegionDto>(regionDomain);
             // return deleted region
             return Ok(regionDto);
         }

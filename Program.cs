@@ -10,10 +10,20 @@ using Microsoft.AspNetCore.Identity;
 using coreAPI.Repositories.Tokens;
 using Microsoft.OpenApi.Models;
 using coreAPI.Repositories.Uploads;
+using Microsoft.Extensions.FileProviders;
+using Serilog;
 
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+Serilog.Core.Logger logger = new LoggerConfiguration()
+                .WriteTo.Console()
+                .WriteTo.File("Logs/coreAPILogs.txt", rollingInterval: RollingInterval.Day)
+                .MinimumLevel.Information()
+                .CreateLogger();
+
+builder.Logging.ClearProviders();
+builder.Logging.AddSerilog(logger);
 
 builder.Services.AddControllers();
 builder.Services.AddHttpContextAccessor();
@@ -92,7 +102,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
         ))
      });
 
-var app = builder.Build();
+WebApplication app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -106,6 +116,12 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 
 app.UseAuthorization();
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "UploadFolder", "Images")),
+    RequestPath = "/UploadFolder/Images"
+});
 
 app.MapControllers();
 

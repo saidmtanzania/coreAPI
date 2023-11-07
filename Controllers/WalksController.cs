@@ -34,9 +34,9 @@ namespace coreAPI.Controllers
         )
         {
             //Geting Data from Repository
-            var walkDomain = await _walksRepository.GetAllAsync(filterOn, filterQuery, sortBy, IsAsceding, pageNumber, pageSize);
+            List<Walk> walkDomain = await _walksRepository.GetAllAsync(filterOn, filterQuery, sortBy, IsAsceding, pageNumber, pageSize);
             //Map Domain Model to DTO
-            var walkDto = _mapper.Map<List<WalkDto>>(walkDomain);
+            List<WalkDto> walkDto = _mapper.Map<List<WalkDto>>(walkDomain);
             //Return Walks to Client
             return Ok(walkDto);
         }
@@ -49,14 +49,14 @@ namespace coreAPI.Controllers
         public async Task<ActionResult> GetById([FromRoute] Guid id)
         {
             //Geting Data from Repository
-            var walkDomain = await _walksRepository.GetByIdAsync(id);
+            Walk? walkDomain = await _walksRepository.GetByIdAsync(id);
             //Checking if return data is not null
             if (walkDomain == null)
             {
                 return NotFound();
             }
             //Map Domain Model to DTO
-            var walkDto = _mapper.Map<WalkDto>(walkDomain);
+            WalkDto walkDto = _mapper.Map<WalkDto>(walkDomain);
             //Return Walk to Client
             return Ok(walkDto);
         }
@@ -70,11 +70,11 @@ namespace coreAPI.Controllers
         public async Task<ActionResult> Create([FromBody] AddWalksRequestDto addWalksRequestDto)
         {
             //Map DTO to Domain Model
-            var walkDomain = _mapper.Map<Walk>(addWalksRequestDto);
+            Walk walkDomain = _mapper.Map<Walk>(addWalksRequestDto);
             //Use Domain Model to create walk
             walkDomain = await _walksRepository.CreateAsync(walkDomain);
             //Map Domain Model to DTO
-            var walkDto = _mapper.Map<WalkDto>(walkDomain);
+            WalkDto walkDto = _mapper.Map<WalkDto>(walkDomain);
             //Return Created walk to Client
             return CreatedAtAction(nameof(GetById), new { id = walkDto.Id }, walkDto);
         }
@@ -88,7 +88,7 @@ namespace coreAPI.Controllers
         public async Task<ActionResult> Update([FromRoute] Guid id, [FromBody] UpdateWalksRequestDto updateWalksRequestDto)
         {
             //Map DTO to Domain Model
-            var walkDomain = _mapper.Map<Walk>(updateWalksRequestDto);
+            Walk? walkDomain = _mapper.Map<Walk>(updateWalksRequestDto);
             //Use Domain Model to update walk
             walkDomain = await _walksRepository.UpdateAsync(id, walkDomain);
             //Check if walk doesnt exist and return response
@@ -98,7 +98,7 @@ namespace coreAPI.Controllers
 
             }
             //Map Domain Model to DTO
-            var walkDto = _mapper.Map<WalkDto>(walkDomain);
+            WalkDto walkDto = _mapper.Map<WalkDto>(walkDomain);
             //Return Updated walk to Client
             return Ok(walkDto);
         }
@@ -111,7 +111,7 @@ namespace coreAPI.Controllers
         public async Task<ActionResult> Delete([FromRoute] Guid id)
         {
             //fetching a existing walk from Repository and delete it
-            var walkDomain = await _walksRepository.DeleteAsync(id);
+            Walk? walkDomain = await _walksRepository.DeleteAsync(id);
             //Check if region doesnt exist and return response
             if (walkDomain == null)
             {
