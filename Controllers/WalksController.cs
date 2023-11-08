@@ -1,3 +1,4 @@
+using System.Net;
 using AutoMapper;
 using coreAPI.Middlewares;
 using coreAPI.Models.Domain;
@@ -13,32 +14,37 @@ namespace coreAPI.Controllers
     {
         private readonly IWalksRepository _walksRepository;
         private readonly IMapper _mapper;
+        private readonly ILogger<WalksController> _logger;
 
-        public WalksController(IWalksRepository walksRepository, IMapper mapper)
+        public WalksController(IWalksRepository walksRepository, IMapper mapper, ILogger<WalksController> logger)
         {
             _walksRepository = walksRepository;
             _mapper = mapper;
+            _logger = logger;
         }
 
         //GET All Walks
         //GET
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> GetAll(
             [FromQuery] string? filterOn,
             [FromQuery] string? filterQuery,
             [FromQuery] string? sortBy,
-            [FromQuery] bool IsAsceding,
+            [FromQuery] bool? IsAsceding = true,
             [FromQuery] int pageNumber = 1,
             [FromQuery] int pageSize = 1000
         )
         {
+
             //Geting Data from Repository
-            List<Walk> walkDomain = await _walksRepository.GetAllAsync(filterOn, filterQuery, sortBy, IsAsceding, pageNumber, pageSize);
+            List<Walk> walkDomain = await _walksRepository.GetAllAsync(filterOn, filterQuery, sortBy, IsAsceding ?? true, pageNumber, pageSize);
             //Map Domain Model to DTO
             List<WalkDto> walkDto = _mapper.Map<List<WalkDto>>(walkDomain);
             //Return Walks to Client
             return Ok(walkDto);
+
         }
 
         //GET Walk By Id

@@ -27,25 +27,18 @@ namespace coreAPI.Controllers
         //GET all regions
         //GET
         [HttpGet]
-        // [Authorize(Roles = "Reader")]
+        [Authorize(Roles = "Reader")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> GetAll()
         {
-            try
-            {
-                throw new Exception("Pull Over here x");
-                //Get Data From Repository
-                List<Region> regionDomain = await _regionRepository.GetAllAsync();
-                //Map Domain Model to DTOs
-                List<RegionDto> regionDto = _mapper.Map<List<RegionDto>>(regionDomain);
-                //Return DTOs to client
-                return Ok(regionDto);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, message: ex.Message);
-                return BadRequest(ex.Message);
-            }
+            //Get Data From Repository
+            List<Region> regionDomain = await _regionRepository.GetAllAsync();
+            //Map Domain Model to DTOs
+            List<RegionDto> regionDto = _mapper.Map<List<RegionDto>>(regionDomain);
+            //Return DTOs to client
+            return Ok(regionDto);
         }
 
         //GET one region

@@ -43,7 +43,7 @@ namespace coreAPI.Repositories.Walks
             string? filterOn = null,
             string? filterQuery = null,
             string? sortBy = null,
-            bool IsAsceding = true,
+            bool? IsAsceding = true,
             int pageNumber = 1,
             int pageSize = 1000
         )
@@ -65,11 +65,12 @@ namespace coreAPI.Repositories.Walks
             {
                 if (sortBy.Equals("Name", StringComparison.OrdinalIgnoreCase))
                 {
-                    walks = IsAsceding ? walks.OrderBy(x => x.Name) : walks.OrderByDescending(x => x.Name);
+                    walks = IsAsceding.HasValue && IsAsceding.Value ? walks.OrderBy(x => x.Name) : walks.OrderByDescending(x => x.Name);
+
                 }
                 else if (sortBy.Equals("Length", StringComparison.OrdinalIgnoreCase))
                 {
-                    walks = IsAsceding ? walks.OrderBy(x => x.LengthInKm) : walks.OrderByDescending(x => x.LengthInKm);
+                    walks = IsAsceding.HasValue && IsAsceding.Value ? walks.OrderBy(x => x.LengthInKm) : walks.OrderByDescending(x => x.LengthInKm);
 
                 }
             }

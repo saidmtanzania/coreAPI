@@ -12,6 +12,7 @@ using Microsoft.OpenApi.Models;
 using coreAPI.Repositories.Uploads;
 using Microsoft.Extensions.FileProviders;
 using Serilog;
+using coreAPI.Middlewares;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -110,6 +111,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<ExceptionHandlerMiddleware>();
 
 app.UseHttpsRedirection();
 
